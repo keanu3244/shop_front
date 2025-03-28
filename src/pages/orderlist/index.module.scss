@@ -1,0 +1,30 @@
+.container {
+  padding: 20px;
+
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .orderCard {
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+
+  .paymentPopup {
+    padding: 20px;
+    text-align: center;
+
+    .paymentButton {
+      margin-top: 10px;
+    }
+  }
+
+  .shipButtons {
+    margin-top: 10px;
+
+    button {
+      margin-right: 10px;
+    }
+  }
+}

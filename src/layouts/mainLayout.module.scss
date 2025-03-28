@@ -1,0 +1,62 @@
+// src/styles/mainLayout.module.scss
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.sidebar {
+  height: 100%;
+  background-color: #f7f8fa;
+  border-right: 1px solid #ebedf0;
+
+  .sidebarContent {
+    height: 100%;
+  }
+
+  .sidebarItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .sidebarTitle {
+      font-size: 16px;
+    }
+  }
+}
+
+.mainContent {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f1f2f5;
+}
+
+// 桌面端：侧边栏宽度 200px
+@media (min-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+}
+
+// 移动端：侧边栏宽度 80px，标题缩小
+@media (max-width: 767px) {
+  .sidebar {
+    width: 80px;
+
+    .sidebarItem {
+      flex-direction: column;
+      gap: 4px;
+
+      .sidebarTitle {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .mainContent {
+    padding: 10px;
+  }
+}

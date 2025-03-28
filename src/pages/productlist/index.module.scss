@@ -1,0 +1,41 @@
+.container {
+  padding: 20px;
+
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .searchBar {
+    margin-bottom: 20px;
+  }
+
+  .productGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .productCard {
+    width: 45%;
+    margin-bottom: 10px;
+
+    .productImage {
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .categoryTag {
+      height: 30px;
+      background-color: #f5f5f5;
+      margin-bottom: 10px;
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+}
