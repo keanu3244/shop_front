@@ -1,11 +1,12 @@
 // src/App.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
+import { Loading, Flex } from "react-vant"; // 引入 Flex 组件用于布局
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -16,20 +17,77 @@ import OrderList from "./pages/orderlist";
 import Profile from "./pages/profile";
 import Balance from "./pages/balance";
 import CategoryManage from "./pages/categoryManage";
-import "./styles.css";
+import request from "./utils/request";
 
 function App() {
-  const [user, setUser] = useState(null); // 用户信息：{ role: 'merchant' 或 'customer', username: '' }
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("App component mounted");
+    const restoreUser = async () => {
+      let restoredUser = null;
+      try {
+        const token = localStorage.getItem("token");
+        console.log("Token from localStorage:", token);
+        if (token) {
+          const { data, status } = await request.get("/user/verify", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log("恢复用户状态:", data);
+          if (status === "ok") {
+            restoredUser = data.user;
+            console.log("Restored user:", restoredUser);
+          } else {
+            localStorage.removeItem("token");
+            console.log("Token invalid, user set to null");
+          }
+        } else {
+          console.log("No token found, user set to null");
+        }
+      } catch (error) {
+        console.error("恢复用户状态失败:", error);
+        localStorage.removeItem("token");
+        console.log("Error occurred, user set to null");
+      } finally {
+        setUser(restoredUser);
+        setLoading(false);
+        console.log("Loading set to false, user:", restoredUser);
+      }
+    };
+
+    restoreUser();
+  }, []);
+
+  console.log("Rendering App, user:", user, "loading:", loading);
+
+  if (loading) {
+    return (
+      <Flex
+        direction="column"
+        justify="center"
+        align="center"
+        style={{ height: "100vh" }}
+      >
+        <Loading type="spinner" size="large" color="#1989fa" />
+      </Flex>
+    );
+  }
 
   return (
     <Router>
       <div className="container">
         <Routes>
-          {/* 登录和注册页面独立展示 */}
-          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route
+            path="/login"
+            element={
+              user ? <Navigate to="/products" /> : <Login setUser={setUser} />
+            }
+          />
           <Route path="/register" element={<Register setUser={setUser} />} />
 
-          {/* 其他页面使用侧边栏布局 */}
           <Route
             path="/"
             element={
@@ -58,7 +116,6 @@ function App() {
             <Route path="categories" element={<CategoryManage />} />
           </Route>
 
-          {/* 404 路由 */}
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>

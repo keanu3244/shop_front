@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom"; // 导入 useLocation
 import { Button, Card, Popup, RadioGroup, Radio } from "react-vant";
-import axios from "axios"; // 用于通过 productId 获取商品数据
 
 function OrderList({ user = { role: "customer", username: "defaultUser" } }) {
   const location = useLocation(); // 使用 useLocation 获取 location
@@ -85,8 +84,7 @@ function OrderList({ user = { role: "customer", username: "defaultUser" } }) {
   const userOrders = orders.filter((order) => order.user === user.username);
 
   return (
-    <div>
-      <h2>订单列表</h2>
+    <>
       {userOrders.length === 0 ? (
         <p>暂无订单</p>
       ) : (
@@ -146,7 +144,7 @@ function OrderList({ user = { role: "customer", username: "defaultUser" } }) {
           </Button>
         </div>
       </Popup>
-    </div>
+    </>
   );
 }
 

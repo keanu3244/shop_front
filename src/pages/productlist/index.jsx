@@ -51,7 +51,6 @@ function ProductList({ user }) {
 
   return (
     <div>
-      <h2 style={{ textAlign: "center" }}>商品列表</h2>
       <Search
         placeholder="搜索商品"
         value={searchValue}
@@ -70,7 +69,11 @@ function ProductList({ user }) {
         }}
       >
         {filteredProducts.map((product) => (
-          <Card key={product.id} style={{ width: "45%", marginBottom: "10px" }}>
+          <Card
+            round
+            key={product.id}
+            style={{ width: "45%", marginBottom: "10px" }}
+          >
             <Card.Body>
               <Card.Header>{product.title}</Card.Header>
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -114,7 +117,9 @@ function ProductList({ user }) {
               </div>
             </Card.Body>
             {user.role === "customer" && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <Card.Footer
+                style={{ display: "flex", justifyContent: "center" }}
+              >
                 <Button
                   type="primary"
                   size="small"
@@ -122,7 +127,7 @@ function ProductList({ user }) {
                 >
                   购买
                 </Button>
-              </div>
+              </Card.Footer>
             )}
           </Card>
         ))}

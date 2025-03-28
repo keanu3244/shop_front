@@ -1,6 +1,6 @@
 // src/pages/CategoryManage.jsx
 import React, { useState, useEffect } from "react";
-import { Button, Input, Cell, List,Toast } from "react-vant";
+import { Button, Input, Cell, List, Toast } from "react-vant";
 import request from "@/utils/request";
 
 const CategoryManage = () => {
@@ -44,7 +44,6 @@ const CategoryManage = () => {
 
   return (
     <div>
-      <h2>分类管理</h2>
       <Cell title="新分类名称">
         <Input
           placeholder="请输入分类名称"
@@ -52,7 +51,12 @@ const CategoryManage = () => {
           onChange={(val) => setNewCategory(val)}
         />
       </Cell>
-      <Button type="primary" block onClick={handleCreate} style={{ marginBottom: "20px" }}>
+      <Button
+        type="primary"
+        block
+        onClick={handleCreate}
+        style={{ marginBottom: "20px" }}
+      >
         创建分类
       </Button>
       <List>

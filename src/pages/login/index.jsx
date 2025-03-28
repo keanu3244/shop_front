@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Input, Cell, Popup, RadioGroup, Radio } from "react-vant";
 import axios from "axios";
@@ -12,6 +12,12 @@ function Login({ setUser }) {
   // const [captchaInput, setCaptchaInput] = useState("");
   // const [showCaptchaPopup, setShowCaptchaPopup] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const { username } = JSON.parse(localStorage.getItem("user"));
+    console.log("user", username);
+    setUsername(username);
+  }, []);
 
   // function generateCaptcha() {
   //   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

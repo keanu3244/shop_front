@@ -2,7 +2,6 @@
 import React from "react";
 import { Cell, Button, Toast } from "react-vant";
 import { useNavigate } from "react-router-dom";
-
 const Profile = ({ user, setUser }) => {
   const navigate = useNavigate();
 
@@ -14,8 +13,7 @@ const Profile = ({ user, setUser }) => {
   };
 
   return (
-    <div>
-      <h2>个人中心</h2>
+    <>
       <Cell title="用户名" value={user?.username || "未知"} />
       <Cell title="角色" value={user?.role === "merchant" ? "商家" : "客户"} />
       <Cell title="注册时间" value="2025-03-27" />
@@ -27,7 +25,7 @@ const Profile = ({ user, setUser }) => {
       >
         退出登录
       </Button>
-    </div>
+    </>
   );
 };
 
