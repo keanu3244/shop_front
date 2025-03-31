@@ -39,7 +39,8 @@ function ProductList({ user }) {
       .toLowerCase()
       .includes(searchValue.toLowerCase());
     const matchesCategory =
-      selectedCategory === "所有分类" || product.category === selectedCategory;
+      selectedCategory === "所有分类" ||
+      product.categoryId === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -113,7 +114,11 @@ function ProductList({ user }) {
                   textAlign: "center", // 添加 text-align: center
                 }}
               >
-                {product.category}
+                {
+                  categories.find(
+                    (category) => category.value === product.categoryId
+                  )?.text
+                }
               </div>
             </Card.Body>
             {user.role === "customer" && (

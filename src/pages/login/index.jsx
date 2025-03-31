@@ -14,7 +14,7 @@ function Login({ setUser }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { username } = JSON.parse(localStorage.getItem("user"));
+    const { username = "" } = JSON.parse(localStorage.getItem("user") || "{}");
     console.log("user", username);
     setUsername(username);
   }, []);

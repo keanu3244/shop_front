@@ -1,7 +1,7 @@
 // src/layouts/MainLayout.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar, SidebarItem, NavBar, Overlay } from "react-vant";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import {
   ShopO,
   CartO,
@@ -15,23 +15,11 @@ import styles from "./mainLayout.module.scss";
 
 const MainLayout = ({ user }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // 获取当前路由信息
   const [activeKey, setActiveKey] = useState(0);
-  const [sidebarVisible, setSidebarVisible] = useState(false); // 控制侧边栏显示/隐藏
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [title, setTitle] = useState("");
-  // 切换侧边栏显示状态
-  const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
-  };
 
-  // 关闭侧边栏
-  const closeSidebar = () => {
-    setSidebarVisible(false);
-  };
-
-  // 刷新页面
-  const refreshPage = () => {
-    window.location.reload();
-  };
   // 根据用户角色动态显示侧边栏 Tab
   const sidebarItems =
     user.role === "merchant"
@@ -88,6 +76,37 @@ const MainLayout = ({ user }) => {
           },
         ];
 
+  // 在组件加载时，根据当前 URL 设置 activeKey 和 title
+  useEffect(() => {
+    const currentPath = location.pathname; // 获取当前 URL 路径
+    const matchedIndex = sidebarItems.findIndex(
+      (item) => item.path === currentPath
+    );
+    if (matchedIndex !== -1) {
+      setActiveKey(matchedIndex);
+      setTitle(sidebarItems[matchedIndex].title);
+    } else {
+      // 如果当前路径不在 sidebarItems 中，可以设置一个默认值
+      setActiveKey(0);
+      setTitle(sidebarItems[0].title);
+    }
+  }, [location.pathname, sidebarItems]); // 依赖 location.pathname 和 sidebarItems
+
+  // 切换侧边栏显示状态
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
+  // 关闭侧边栏
+  const closeSidebar = () => {
+    setSidebarVisible(false);
+  };
+
+  // 刷新页面
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   const handleSidebarChange = (key) => {
     console.log("key", key);
     setActiveKey(key);
@@ -112,7 +131,7 @@ const MainLayout = ({ user }) => {
       <Overlay
         visible={sidebarVisible}
         onClick={closeSidebar}
-        style={{ zIndex: 999 }} // 确保遮罩在主内容上层，但低于侧边栏
+        style={{ zIndex: 999 }}
       >
         {/* 侧边栏 */}
         <div className={`${styles.sidebar} ${styles.visible}`}>

@@ -1,6 +1,14 @@
 // src/pages/productupload.jsx
 import React, { useState, useEffect } from "react";
-import { Button, Input, Cell, Uploader, Picker, Toast } from "react-vant";
+import {
+  Button,
+  Input,
+  Cell,
+  Uploader,
+  Picker,
+  Toast,
+  Checkbox,
+} from "react-vant";
 import { useNavigate } from "react-router-dom";
 import request from "@/utils/request";
 import styles from "./index.module.scss";
@@ -9,12 +17,24 @@ const ProductUpload = () => {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState([]);
   const [stock, setStock] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState(""); // 改为 categoryId
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState([]); // 新增支付方式
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false); // 新增加载状态
   const navigate = useNavigate();
 
+  // 支付方式选项
+  const paymentOptions = [
+    { label: "微信支付", value: "wechat" },
+    { label: "支付宝支付", value: "alipay" },
+    { label: "USDT 支付", value: "usdt" },
+    { label: "TRX 支付", value: "trx" },
+    { label: "银行卡支付", value: "bank_card" },
+  ];
+
+  // 获取分类列表
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -24,7 +44,7 @@ const ProductUpload = () => {
         if (response.status === "ok") {
           const categoryOptions = response.data.map((cat) => ({
             text: cat.name,
-            value: cat.name,
+            value: cat.id, // 使用分类 ID
           }));
           setCategories(categoryOptions);
         } else {
@@ -44,11 +64,16 @@ const ProductUpload = () => {
       !title ||
       !image.length ||
       !stock ||
-      !category ||
+      !categoryId ||
       !description ||
       !price
     ) {
       Toast.fail("请填写所有字段");
+      return;
+    }
+
+    if (paymentMethods.length === 0) {
+      Toast.fail("请选择至少一种支付方式");
       return;
     }
 
@@ -64,19 +89,22 @@ const ProductUpload = () => {
       return;
     }
 
+    setLoading(true); // 设置加载状态
     try {
       const formData = new FormData();
       formData.append("title", title);
-      formData.append("image", image[0].file);
+      formData.append("files", image[0].file); // 后端期望的字段名是 "file"
       formData.append("stock", stockNum);
-      formData.append("category", category);
+      formData.append("categoryId", categoryId); // 改为 categoryId
       formData.append("description", description);
       formData.append("price", priceNum);
+      formData.append("supportedPaymentMethods", paymentMethods); // 添加支付方式
 
       console.log("开始上传商品，formData:", formData);
       const response = await request.post("/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // 添加授权头
         },
       });
       console.log("商品上传响应:", response);
@@ -90,6 +118,8 @@ const ProductUpload = () => {
     } catch (error) {
       Toast.fail("上传失败，请稍后重试");
       console.error("上传失败:", error);
+    } finally {
+      setLoading(false); // 恢复加载状态
     }
   };
 
@@ -124,8 +154,8 @@ const ProductUpload = () => {
         <Cell title="商品分类">
           <Picker
             columns={categories}
-            value={category}
-            onChange={(val) => setCategory(val)}
+            value={categoryId}
+            onChange={(val) => setCategoryId(val)}
             placeholder="请选择分类"
           />
         </Cell>
@@ -146,11 +176,29 @@ const ProductUpload = () => {
             onChange={(val) => setPrice(val)}
           />
         </Cell>
+        <Cell title="支持的支付方式">
+          <Checkbox.Group
+            value={paymentMethods}
+            onChange={(val) => setPaymentMethods(val)}
+          >
+            {paymentOptions.map((option) => (
+              <Checkbox
+                key={option.value}
+                name={option.value}
+                style={{ marginBottom: "8px" }}
+              >
+                {option.label}
+              </Checkbox>
+            ))}
+          </Checkbox.Group>
+        </Cell>
         <Button
           type="primary"
           block
           onClick={handleUpload}
           style={{ marginTop: "20px" }}
+          loading={loading} // 显示加载状态
+          disabled={loading} // 禁用按钮防止重复提交
         >
           上传
         </Button>
@@ -159,6 +207,7 @@ const ProductUpload = () => {
           block
           style={{ marginTop: "10px", marginBottom: "20px" }}
           onClick={() => navigate("/products")}
+          disabled={loading} // 禁用返回按钮
         >
           返回
         </Button>
