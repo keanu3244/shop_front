@@ -32,7 +32,6 @@ service.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
     const res = response.data;
-    console.log("axios-res", response);
     if (response?.status === 401) {
       window.location.href = "/login";
       Toast.fail("未授权，请重新登录");

@@ -18,7 +18,7 @@ const Profile = ({ user, setUser }) => {
       <Cell title="角色" value={user?.role === "merchant" ? "商家" : "客户"} />
       <Cell title="注册时间" value="2025-03-27" />
       <Button
-        type="danger"
+        type="primary"
         block
         style={{ marginTop: "20px" }}
         onClick={handleLogout}

@@ -101,12 +101,7 @@ const ProductUpload = () => {
       formData.append("supportedPaymentMethods", paymentMethods); // 添加支付方式
 
       console.log("开始上传商品，formData:", formData);
-      const response = await request.post("/products", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // 添加授权头
-        },
-      });
+      const response = await request.post("/products", formData, {});
       console.log("商品上传响应:", response);
 
       if (response.status === "ok") {

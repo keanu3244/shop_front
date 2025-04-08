@@ -1,6 +1,6 @@
 // src/layouts/MainLayout.jsx
 import React, { useState, useEffect } from "react";
-import { Sidebar, SidebarItem, NavBar, Overlay } from "react-vant";
+import { Sidebar, SidebarItem, NavBar, Overlay, Badge } from "react-vant";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import {
   ShopO,
@@ -10,6 +10,8 @@ import {
   Upgrade,
   Bars,
   Replay,
+  Paid,
+  ChatO,
 } from "@react-vant/icons";
 import styles from "./mainLayout.module.scss";
 
@@ -37,6 +39,12 @@ const MainLayout = ({ user }) => {
             path: "/products",
           },
           {
+            key: "messageList",
+            title: "消息列表",
+            icon: <ChatO />,
+            path: "/message-list",
+          },
+          {
             key: "orders",
             title: "订单中心",
             icon: <CartO />,
@@ -47,6 +55,12 @@ const MainLayout = ({ user }) => {
             title: "个人中心",
             icon: <FriendsO />,
             path: "/profile",
+          },
+          {
+            key: "merchantSetting",
+            title: "商家配置",
+            icon: <Paid />,
+            path: "/merchant-setting",
           },
         ]
       : [
@@ -73,6 +87,12 @@ const MainLayout = ({ user }) => {
             title: "账户余额",
             icon: <BalancePay />,
             path: "/balance",
+          },
+          {
+            key: "chat",
+            title: "客服消息",
+            icon: <ChatO />,
+            path: "/chat",
           },
         ];
 

@@ -22,4 +22,29 @@ module.exports = function (app) {
       },
     })
   );
+  // 新增 Socket.IO 代理配置
+  app.use(
+    "/socket.io",
+    createProxyMiddleware({
+      target: process.env.REACT_APP_BASE_API, // 或单独设置 Socket.IO 服务器地址
+      changeOrigin: true,
+      ws: true, // 启用 WebSocket 代理
+      pathRewrite: {
+        "^/socket.io": "", // 移除路径中的/socket.io前缀
+      },
+      // Socket.IO 特殊配置
+      onProxyReqWs: (proxyReq, req, socket, options, head) => {
+        console.log(
+          `Proxying WebSocket request: ${req.url} -> ${process.env.REACT_APP_BASE_API}`
+        );
+      },
+      onError(err, req, res) {
+        console.error("WebSocket proxy error:", err);
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.end("WebSocket proxy error");
+      },
+    })
+  );
 };

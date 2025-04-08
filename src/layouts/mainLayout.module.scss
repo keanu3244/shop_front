@@ -39,6 +39,10 @@
     width:100%;
   }
 
+:global(.rv-sidebar-item--select::before){
+  background-color:var(--rv-blue)
+}
+
 // 桌面端：侧边栏宽度 200px
 @media (min-width: 768px) {
   .sidebar {

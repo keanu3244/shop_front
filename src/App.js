@@ -18,6 +18,12 @@ import Profile from "./pages/profile";
 import Balance from "./pages/balance";
 import CategoryManage from "./pages/categoryManage";
 import request from "./utils/request";
+import OrderDetail from "./pages/orderDetail";
+import MerchantChat from "./pages/merchantChat";
+import MerchantSetting from "./pages/merchantSetting";
+import Chat from "./pages/chat";
+import ChatWidget from "./components/ChatWidget";
+import Toast from "react-vant/es/toast";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,14 +35,12 @@ function App() {
       let restoredUser = null;
       try {
         const token = localStorage.getItem("token");
-        console.log("Token from localStorage:", token);
         if (token) {
           const { data, status } = await request.get("/user/verify", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log("恢复用户状态:", data);
           if (status === "ok") {
             restoredUser = data.user;
             console.log("Restored user:", restoredUser);
@@ -87,7 +91,6 @@ function App() {
             }
           />
           <Route path="/register" element={<Register setUser={setUser} />} />
-
           <Route
             path="/"
             element={
@@ -115,8 +118,31 @@ function App() {
             <Route path="balance" element={<Balance />} />
             <Route path="categories" element={<CategoryManage />} />
           </Route>
-
           <Route path="*" element={<Navigate to="/login" />} />
+          {user && user.role === "merchant" ? (
+            <>
+              <Route
+                path="/merchant-setting"
+                element={<MerchantSetting user={user} />}
+              />
+              <Route
+                path="/message-list"
+                element={<MerchantChat user={user} />}
+              />
+            </>
+          ) : (
+            <Route path="/chat" element={user && <Chat user={user} />} />
+          )}
+
+          <Route
+            path="/orders/:orderId"
+            element={
+              <>
+                <OrderDetail />
+                {/* <ChatWidget /> */}
+              </>
+            }
+          />
         </Routes>
       </div>
     </Router>

@@ -15,7 +15,6 @@ function Login({ setUser }) {
 
   useEffect(() => {
     const { username = "" } = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log("user", username);
     setUsername(username);
   }, []);
 
@@ -41,15 +40,13 @@ function Login({ setUser }) {
       password,
     });
     const role = response.data.role;
-    console.log("response", response);
     if (response.data?.token) {
       // 保存 token 到 localStorage
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify({ username, role }));
+      localStorage.setItem("user", JSON.stringify(response.data));
 
       // 更新用户状态
       setUser({ username, role });
-      console.log("进入");
       // 根据角色跳转到不同页面
       if (role === "merchant") {
         navigate("/upload");

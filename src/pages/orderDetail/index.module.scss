@@ -1,0 +1,93 @@
+// src/pages/index.module.scss
+
+// 全局容器样式
+.orderDetail {
+  box-sizing: border-box;
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f5f5; // 背景色，浅灰色，与 React Vant 的风格一致
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  // 标题样式
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  // 倒计时样式
+  .remainingTime {
+    font-size: 16px;
+    color: #ff4d4f; // 红色，突出显示
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+// 每个部分的容器样式（支付信息、操作按钮等）
+.section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px; // 限制最大宽度，适配移动端和桌面端
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); // 轻微阴影，增加层次感
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  // 提示文本样式
+  .note {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+}
+
+// 弹窗内容样式
+.paymentDetails {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #999;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  // 确认按钮样式（React Vant 的 Button 组件会覆盖部分样式，这里只做微调）
+  .rv-button {
+    margin-top: 10px;
+  }
+}
+
+// 按钮样式（微调 React Vant 的 Button 组件）
+:global {
+  .rv-button--block {
+    margin-top: 10px;
+  }
+
+  .rv-button--danger {
+    margin-top: 20px;
+  }
+}
